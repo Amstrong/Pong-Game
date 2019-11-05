@@ -13,6 +13,7 @@ class Scene_play extends Phaser.Scene {
       color: "#ffffff",
       fontSize: 40
     });
+
     var counterLeft = 0;
     var counterRight = 0;
     let center_width = this.sys.game.config.width / 2;
@@ -80,13 +81,14 @@ class Scene_play extends Phaser.Scene {
       this.izquierda.body.setVelocity(0);
     }
     if (this.ball.x < 0) {
-      counterLeft += 1;
+      //counterLeft += 1;
       this.ball.setPosition(
         this.sys.game.config.width / 2,
         this.sys.game.config.height / 2
       );
     } else if (this.ball.x > this.sys.game.config.width) {
-      counterRight += 1;
+      // counterRight += 1;
+      this.ScoreRight.add.text();
       this.ball.setPosition(
         this.sys.game.config.width / 2,
         this.sys.game.config.height / 2
@@ -96,10 +98,7 @@ class Scene_play extends Phaser.Scene {
   chocaPala() {
     this.ball.setVelocityY(Phaser.Math.Between(-150, 150));
   }
+  //Metodo activo
 }
-
-// Esto en el ejemplo planteado, es para cuando la bola salga del container
-// se vuelva a poner en el centro, es bueno tenerla de referencia pero no necesario
-// en nuestro caso.
 
 export default Scene_play;
