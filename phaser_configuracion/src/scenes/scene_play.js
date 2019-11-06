@@ -5,11 +5,15 @@ class Scene_play extends Phaser.Scene {
   }
 
   preload() {
-    this.load.audio("prueba", "./assets/Pop.mp3");
+    this.load.audio("upAndDown", "./assets/Pop.mp3");
+    this.load.audio("ballOut", "./assets/Drill_Gear.mp3");
   }
 
   create() {
-    this.audio = this.sound.add("prueba", { loop: false });
+    //Creación del sonido (Variables)
+    this.ballOut = this.sound.add("ballOut", { loop: false });
+    this.upAndDown = this.sound.add("upAndDown", { loop: false });
+    //Declaración de Textos en el Frame
     this.ScoreLeft = this.add.text(100, 6, 0, {
       color: "#ffffff",
       fontSize: 40
@@ -18,7 +22,10 @@ class Scene_play extends Phaser.Scene {
       color: "#ffffff",
       fontSize: 40
     });
-
+    //Variables para Marcadores
+    this.valor1 = 0;
+    this.valor2 = 0;
+    //Dimensiones de pantalla
     let center_width = this.sys.game.config.width / 2;
     let center_height = this.sys.game.config.height / 2;
     let screen = this.sys.game.config.width;
@@ -52,36 +59,33 @@ class Scene_play extends Phaser.Scene {
       this
     );
 
-    //Controles
+    //CONTROLES
+
     //Pala derecha
     this.cursor = this.input.keyboard.createCursorKeys();
     //Pala izquierda
     this.cursor_W = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.W
     );
-    this.audio.play();
     this.cursor_W = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.W
     );
-    this.audio.play();
     this.cursor_S = this.input.keyboard.addKey(
       Phaser.Input.Keyboard.KeyCodes.S
     );
-    this.audio.play();
-
-    //controles musica
-    this.input.keyboard.on("keydown_UP", () => {
-      this.audio.play();
+    //Controles musica
+    this.input.keyboard.on("keydown-W", () => {
+      this.upAndDown.play();
     });
-    this.input.keyboard.on(this.cursor_W, () => {
-      this.audio.play();
+    this.input.keyboard.on("keydown-S", () => {
+      this.upAndDown.play();
     });
-
-    this.input.keyboard.on("keydown_DOWN", () => {
-      this.audio.play();
+    this.input.keyboard.on("keydown-UP", () => {
+      this.upAndDown.play();
     });
-    this.valor1 = 0;
-    this.valor2 = 0;
+    this.input.keyboard.on("keydown-DOWN", () => {
+      this.upAndDown.play();
+    });
   }
   MarcadorIzquierda() {
     this.ScoreLeft.text = this.valor1 += 1;
@@ -109,12 +113,14 @@ class Scene_play extends Phaser.Scene {
     }
     if (this.ball.x < 0) {
       this.MarcadorDerecha();
+      this.ballOut.play();
       this.ball.setPosition(
         this.sys.game.config.width / 2,
         this.sys.game.config.height / 2
       );
     } else if (this.ball.x > this.sys.game.config.width) {
       this.MarcadorIzquierda();
+      this.ballOut.play();
       this.ball.setPosition(
         this.sys.game.config.width / 2,
         this.sys.game.config.height / 2
