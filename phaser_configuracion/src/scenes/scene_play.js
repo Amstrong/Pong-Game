@@ -6,6 +6,7 @@ class Scene_play extends Phaser.Scene {
   }
 
   preload() {
+    this.load.bitmapFont("font", "./assets/font.png", "./assets/font.xml");
     this.load.audio("upAndDown", "./assets/Pop.mp3");
     this.load.audio("ballOut", "./assets/Drill_Gear.mp3");
   }
@@ -14,15 +15,15 @@ class Scene_play extends Phaser.Scene {
     //Creación del sonido (Variables)
     this.ballOut = this.sound.add("ballOut", { loop: false });
     this.upAndDown = this.sound.add("upAndDown", { loop: false });
-    //Declaración de Textos en el Frame
-    this.ScoreLeft = this.add.text(400, 6, 0, {
-      color: "#ffffff",
-      fontSize: 40
-    });
-    this.ScoreRight = this.add.text(this.sys.game.config.width - 428, 6, 0, {
-      color: "#ffffff",
-      fontSize: 40
-    });
+    this.ScoreLeft = this.add.bitmapText(400, 6, "font", "0", 40);
+    this.ScoreRight = this.add.bitmapText(
+      this.sys.game.config.width - 428,
+      6,
+      "font",
+      "0",
+      40
+    );
+
     //Variables para Marcadores
     this.valor1 = 0;
     this.valor2 = 0;
@@ -42,7 +43,7 @@ class Scene_play extends Phaser.Scene {
     this.ball = this.physics.add.image(center_width, center_height, "ball");
     this.ball.setCollideWorldBounds(true);
     this.ball.setBounce(1);
-    this.ball.setVelocityX(-300);
+    this.ball.setVelocityX(-500);
 
     //Fisicas
     this.physics.add.collider(
@@ -78,17 +79,17 @@ class Scene_play extends Phaser.Scene {
   update() {
     //Pala derecha
     if (this.cursor.down.isDown) {
-      this.derecha.body.setVelocityY(280);
+      this.derecha.body.setVelocityY(310);
     } else if (this.cursor.up.isDown) {
-      this.derecha.body.setVelocityY(-280);
+      this.derecha.body.setVelocityY(-310);
     } else {
       this.derecha.body.setVelocityY(0);
     }
     //Pala izquierda
     if (this.cursor_S.isDown) {
-      this.izquierda.body.setVelocityY(280);
+      this.izquierda.body.setVelocityY(310);
     } else if (this.cursor_W.isDown) {
-      this.izquierda.body.setVelocityY(-280);
+      this.izquierda.body.setVelocityY(-310);
     } else {
       this.izquierda.body.setVelocity(0);
     }
@@ -127,7 +128,7 @@ class Scene_play extends Phaser.Scene {
     if (this.ScoreLeft.text == 7) {
       this.ScoreLeft.text = 0;
       this.valor1 = 0;
-      this.scene.start("Scene_win");
+      this.scene.start("Scene_win", { ganador: "jugador 1" });
       this.ganador = "Jugador 1";
       var prueba = this.add.image(250, 280, "boton").setInteractive();
       prueba.on("pointerdown", function(pointer) {
@@ -137,8 +138,7 @@ class Scene_play extends Phaser.Scene {
       this.ScoreRight.text = 0;
       this.valor2 = 0;
       this.ganador = "jugador 2";
-      //alert("Jugador 2 ha ganado.");
-      this.scene.start("Scene_win");
+      this.scene.start("Scene_win", { ganador: "jugador 2" });
     }
   }
 }

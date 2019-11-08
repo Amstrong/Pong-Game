@@ -3,14 +3,23 @@ class Scene_win extends Phaser.Scene {
   constructor() {
     super({ key: "Scene_win" });
   }
+  init(data) {
+    this.ganador = data.ganador;
+  }
   preload() {
-    this.infoScene = this.add.text(290, 170, "Nota: Jugador Ganador", {
-      color: "#ffffff",
-      fontSize: 30
-    });
+    this.load.bitmapFont("font", "./assets/font.png", "./assets/font.xml");
   }
   create() {
-    var restartScene = this.add.image(250, 280, "boton").setInteractive();
+    this.infoScene = this.add.bitmapText(
+      166,
+      170,
+      "font",
+      "Felicitaciones, el ganador es   " + this.ganador,
+      30
+    );
+    var restartScene = this.add
+      .image(360, 250, "reiniciarPartida")
+      .setInteractive();
     restartScene.on(
       "pointerdown",
       function(event) {
@@ -18,7 +27,7 @@ class Scene_win extends Phaser.Scene {
       },
       this
     );
-    var returnHome = this.add.image(730, 280, "boton").setInteractive();
+    var returnHome = this.add.image(680, 250, "inicio").setInteractive();
     returnHome.on(
       "pointerdown",
       function(event) {
