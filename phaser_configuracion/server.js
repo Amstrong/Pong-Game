@@ -1,16 +1,11 @@
-var players = [];
-function Player(id, x, y, v, w, h, p) {
-  this.id = id;
-}
 var connections = [];
 var express = require("express");
 var app = express();
 var server = require("http").Server(app);
 var io = require("socket.io").listen(server);
-// app.use("/assets", express.static(__dirname + "/assets/"));
-// app.use("/src", express.static(__dirname + "/src/"));
+//app.use("/assets", express.static(__dirname + "/assets/"));
+//app.use("/src", express.static(__dirname + "/src/"));
 app.use(express.static(__dirname));
-
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
 });
