@@ -94,8 +94,7 @@ class scene_first extends Phaser.Scene {
       "Estableciendo conexion",
       40
     );
-    // var music = this.sound.add("homeSound");
-    // music.play();
+
     this.input.keyboard.on("keydown-ONE", () => {
       this.scene.start("Scene_play");
     });
