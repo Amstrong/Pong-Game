@@ -7,10 +7,11 @@ const config = {
   height: 400,
   parent: "container",
   physics: {
-    default: "arcade",
-    arcade: {
-      debug: true
-    }
+    default: "arcade"
+  },
+  scale: {
+    mode: Phaser.Scale.FIT,
+    autoCenter: Phaser.Scale.CENTER_BOTH
   },
   scene: [Bootloader, Scene_play, scene_first, scene_win]
 };
