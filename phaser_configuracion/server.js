@@ -68,6 +68,9 @@ io.on(
       },
       this
     );
+    socket.on("puntaje", info => {
+      socket.broadcast.emit("actualizar", info);
+    });
 
     socket.on(
       "bolaChoco",

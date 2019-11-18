@@ -116,6 +116,15 @@ class Scene_play extends Phaser.Scene {
       }
       if (xMin <= -10 || xMax >= 1034) {
         if (this.ball) {
+          if (xMin <= -10) {
+            this.MarcadorDerecha();
+            this.socket.emit("puntaje", true);
+          } else {
+            if (xMax >= 1034) {
+              this.MarcadorIzquierda();
+              this.socket.emit("puntaje", false);
+            }
+          }
           this.ball.destroy();
           this.socket.emit("reiniciarBola");
         }
@@ -138,7 +147,8 @@ class Scene_play extends Phaser.Scene {
     // }
   }
 
-  //METODOS
+  //METODOS'
+
   chocaPala() {
     this.socket.emit("bolaChoco");
     this.upAndDown.play();
@@ -167,6 +177,15 @@ class Scene_play extends Phaser.Scene {
       },
       this
     );
+
+    this.socket.on("actualizar", id => {
+      console.log("actualizar");
+      if (id == true) {
+        this.MarcadorDerecha();
+      } else {
+        this.MarcadorDerecha();
+      }
+    });
 
     this.socket.on(
       "nuevoJugador",
