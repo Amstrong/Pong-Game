@@ -3,8 +3,6 @@ import Scene_win from "./scene_win.js";
 class Scene_play extends Phaser.Scene {
   constructor() {
     super({ key: "Scene_play" });
-
-    //console.log(this.socket);
   }
 
   preload() {
@@ -15,20 +13,9 @@ class Scene_play extends Phaser.Scene {
 
   create() {
     this.socket = io();
-    // this.socket.on(
-    //   "connect",
-    //   () => {
-    //     this.socket.emit("ready");
-    //   },
-    //   this
-    // );
-
     this.socket.on("connect", () => {
       this.socket.emit("ready");
     });
-
-    this.registrarSocket();
-
     //Creación del sonido (Variables)
     this.ballOut = this.sound.add("ballOut", { loop: false });
     this.upAndDown = this.sound.add("upAndDown", { loop: false });
@@ -40,7 +27,6 @@ class Scene_play extends Phaser.Scene {
       "0",
       40
     );
-
     //Variables para Marcadores
     this.valor1 = 0;
     this.valor2 = 0;
@@ -48,46 +34,13 @@ class Scene_play extends Phaser.Scene {
     let center_width = this.sys.game.config.width / 2;
     let center_height = this.sys.game.config.height / 2;
     let screen = this.sys.game.config.width;
-
     //Separador
     this.add.image(center_width, center_height, "separador");
-    //Palas
-    // this.izquierda = new Palas(this, 30, center_height, "izquierda");
-    // this.derecha = new Palas(this, screen - 30, center_height, "derecha");
-
     //Bola
     this.physics.world.setBoundsCollision(false, false, true, true);
-    //this.ball = this.physics.add.image(center_width, center_height, "ball");
-    //this.ball.setCollideWorldBounds(true);
-    // this.ball.setBounce(1);
-    //this.ball.setVelocityX(-500);
-
-    //Fisicas
-    // this.physics.add.collider(
-    //   this.ball,
-    //   this.izquierda,
-    //   this.chocaPala,
-    //   null,
-    //   this
-    // );
-    // this.physics.add.collider(
-    //   this.ball,
-    //   this.derecha,
-    //   this.chocaPala,
-    //   null,
-    //   this
-    // );
-
-    //CONTROLES
-    this.cursor = this.input.keyboard.createCursorKeys();
 
     this.puedeChocar = true;
-    // this.input.keyboard.on("keydown-TWO", () => {
-    //   this.scene.pause("Scene_play");
-    // });
-    // this.input.keyboard.on("keydown-THREE", () => {
-    //   this.scene.launch("Scene_play");
-    // });
+    this.registrarSocket();
 
     this.socket.on(
       "emitirPosicion",
@@ -117,10 +70,12 @@ class Scene_play extends Phaser.Scene {
       if (xMin <= -10 || xMax >= 1034) {
         if (this.ball) {
           if (xMin <= -10) {
+            this.ballOut.play();
             this.MarcadorDerecha();
             this.socket.emit("puntaje", true);
           } else {
             if (xMax >= 1034) {
+              this.ballOut.play();
               this.MarcadorIzquierda();
               this.socket.emit("puntaje", false);
             }
@@ -132,7 +87,7 @@ class Scene_play extends Phaser.Scene {
     }
     // if (this.ball.x < 0) {
     //   this.MarcadorDerecha();
-    //   this.ballOut.play();
+
     //   this.ball.setPosition(
     //     this.sys.game.config.width / 2,
     //     this.sys.game.config.height / 2
@@ -155,11 +110,17 @@ class Scene_play extends Phaser.Scene {
   }
   MarcadorIzquierda() {
     this.ScoreLeft.text = this.valor1 += 1;
-    this.finishGame();
+    if (this.ScoreLeft.text >= 5) {
+      this.ScoreLeft.text = "0";
+    }
+    //this.finishGame();
   }
   MarcadorDerecha() {
     this.ScoreRight.text = this.valor2 += 1;
-    this.finishGame();
+    if (this.ScoreRight.text >= 5) {
+      this.ScoreRight.text = "0";
+    }
+    //this.finishGame();
   }
 
   registrarSocket() {
@@ -276,24 +237,24 @@ class Scene_play extends Phaser.Scene {
     );
   }
 
-  finishGame() {
-    var ganador;
-    if (this.ScoreLeft.text == 7) {
-      this.ScoreLeft.text = 0;
-      this.valor1 = 0;
-      this.scene.start("Scene_win", { ganador: "jugador 1" });
-      this.ganador = "Jugador 1";
-      var prueba = this.add.image(250, 280, "boton").setInteractive();
-      prueba.on("pointerdown", function(pointer) {
-        this.scene.restart("Scene_play");
-      });
-    } else if (this.ScoreRight.text == 7) {
-      this.ScoreRight.text = 0;
-      this.valor2 = 0;
-      this.ganador = "jugador 2";
-      this.scene.start("Scene_win", { ganador: "jugador 2" });
-    }
-  }
+  // finishGame() {
+  //   var ganador;
+  //   if (this.ScoreLeft.text == 7) {
+  //     this.ScoreLeft.text = 0;
+  //     this.valor1 = 0;
+  //     this.scene.start("Scene_win", { ganador: "jugador 1" });
+  //     this.ganador = "Jugador 1";
+  //     var prueba = this.add.image(250, 280, "boton").setInteractive();
+  //     prueba.on("pointerdown", function(pointer) {
+  //       this.scene.restart("Scene_play");
+  //     });
+  //   } else if (this.ScoreRight.text == 7) {
+  //     this.ScoreRight.text = 0;
+  //     this.valor2 = 0;
+  //     this.ganador = "jugador 2";
+  //     this.scene.start("Scene_win", { ganador: "jugador 2" });
+  //   }
+  // }
 }
 
 export default Scene_play;
